@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+        <!-- Audio Elements -->
+    <audio id="backgroundMusic" preload="auto" loop>
+        <!-- Tambahkan file musik Anda di sini -->
+        <source src="music/love-song.mp3" type="audio/mpeg">
+        <source src="music/love-song.ogg" type="audio/ogg">
+        <!-- Fallback untuk browser yang tidak support -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music Player Widget -->
+    <div class="music-player" id="musicPlayer" style="display: none;">
+        <div class="music-controls">
+            <button class="music-btn" id="playPauseBtn" onclick="toggleMusic()">
+                <span id="playIcon">▶️</span>
+            </button>
+            <button class="music-btn" id="prevBtn" onclick="previousSong()">⏮️</button>
+            <button class="music-btn" id="nextBtn" onclick="nextSong()">⏭️</button>
+        </div>
+        
+        <div class="progress-bar" onclick="seekMusic(event)">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="music-info">
+            <div class="song-title" id="songTitle">Beautiful Song</div>
+            <div class="song-artist" id="songArtist">Unknown Artist</div>
+        </div>
+        
+        <div class="volume-control">
+            <span style="font-size: 12px;">🔊</span>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70" onchange="setVolume(this.value)">
+        </div>
+        
+        <button class="music-btn" onclick="showPlaylist()">📋</button>
+    </div>
+
+    <!-- Playlist Modal -->
+    <div class="playlist-modal" id="playlistModal">
+        <div class="playlist-content">
+            <button class="close-playlist" onclick="hidePlaylist()">×</button>
+            <div class="playlist-header">
+                <h3>🎵 Playlist Cinta Kita</h3>
+            </div>
+            <div id="playlistItems">
+                <!-- Playlist items akan ditambahkan via JavaScript -->
+            </div>
+        </div>
+    </div>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">Enter Our Secret</h1>
+            <p class="login-subtitle">Only you know the answer</p>
+            <div class="login-form">
+                <input type="password" id="loginInput" placeholder="Apa panggilan sayangmu untukku?" maxlength="20">
+                <button onclick="attemptLogin()" class="login-btn">Login</button>
+            </div>
+            <div id="loginError" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Main Website -->
+    <div id="mainSite" class="main-container" style="display: none;">
+        <!-- Header -->
+        <header class="site-header">
+            <h1 class="main-title"> Selamat Ulang Tahun Sayang 💕</h1>
+            <p class="main-subtitle">To the most beautiful soul I have ever known</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <button onclick="showSection('memories')" class="nav-btn active" id="nav-memories">Kisah Kita</button>
+            <button onclick="showSection('gallery')" class="nav-btn" id="nav-gallery">Kenangan</button>
+            <button onclick="showSection('letter')" class="nav-btn" id="nav-letter">Surat Cinta</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Memories Section -->
+            <section id="memories" class="section active">
+                <div class="timeline">
+                    <div class="timeline-item" onclick="revealMemory(this)">
+                        <div class="timeline-date">9 April 2024</div>
+                        <div class="timeline-content">
+                            <h3>Pertemuan Pertama</h3>
+                            <p class="preview">Klik untuk membuka kenangan ini...</p>
+                            <p class="full-text" style="display: none;">
+                                Hari pertama kita bertemu, aku hanya melihatmu seperti orang baru yang hadir di sekitarku. Aku tak pernah membayangkan kita akan sejauh ini. Namun, ada sesuatu dalam caramu berbicara, dalam senyummu yang membuat semuanya terasa berbeda. Aku tak berpikir untuk menjadi lebih dari teman, tapi seiring waktu, aku menyadari, hari pertama itu adalah awal dari banyak momen yang tak akan terlupakan.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="revealMemory(this)">
+                        <div class="timeline-date">15 Desember 2024</div>
+                        <div class="timeline-content">
+                            <h3>Kencan Pertama</h3>
+                            <p class="preview">Klik untuk membuka kenangan ini...</p>
+                            <p class="full-text" style="display: none;">
+                                Kencan pertama kita, ada rasa gugup yang sulit aku sembunyikan, namun ada kebahagiaan yang lebih besar dari itu. Cara kamu tertawa, bahkan saat leluconku tak seberapa, membuat aku merasa nyaman. Waktu seolah berhenti setiap kali kita berbicara, seakan dunia hanya milik kita berdua. Aku tak tahu apa yang akan terjadi setelah ini, tapi aku tahu saat itu, kamu benar-benar istimewa.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="revealMemory(this)">
+                        <div class="timeline-date">09 Januari 2025</div>
+                        <div class="timeline-content">
+                            <h3>Perpisahan Again</h3>
+                            <p class="preview">Klik untuk membuka kenangan ini...</p>
+                            <p class="full-text" style="display: none;">
+                                Perpisahan pertama kita setelah resmi bersama, setelah sebulan penuh menghabiskan waktu yang penuh tawa dan kenangan manis. Rasanya seperti waktu berlalu begitu cepat, dan meskipun kita harus berpisah karena kuliah, hatiku tetap merasa dekat denganmu. Di setiap detik yang kita lewati, aku semakin yakin bahwa aku harus setia padamu. Usahamu selama sebulan itu begitu berarti, dan aku tahu, meskipun ada jarak, hati kita tetap saling terhubung. Aku hanya perlu menunggu sampai kita bisa bertemu lagi semester depan, dan aku akan selalu berusaha untuk tetap menjaga cinta ini tumbuh, walau terpisah.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="revealMemory(this)">
+                        <div class="timeline-date">Hari Ini</div>
+                        <div class="timeline-content">
+                            <h3>Hari Istimewamu</h3>
+                            <p class="preview">Klik untuk membuka kenangan ini...</p>
+                            <p class="full-text" style="display: none;">
+                                Hari ini adalah hari istimewamu, hari yang penuh kebahagiaan dan kehangatan. Di hari ulang tahunmu ini, aku cuma mau bilang terima kasih karena kamu ada di hidupku. Kamu lebih dari sekadar orang yang aku sayang, kamu adalah bagian yang tak tergantikan. Semoga segala kebahagiaan, cinta, dan keberhasilan selalu menyertaimu. Aku berharap hari-harimu penuh dengan tawa, dan setiap langkahmu membawa kebahagiaan lebih besar. Selamat ulang tahun, sayang. Semoga tahun ini dan selanjutnya semakin indah buatmu, dan aku selalu ada di sampingmu.💕
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery Section -->
+<!-- Gallery Section -->
+<section id="gallery" class="section">
+    <div class="photo-container">
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">📸</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/1.jpeg" alt="Foto pertama kami bersama" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">💕</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">☕</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/2.jpeg" alt="Kencan di café" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">☕</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🌅</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/3.jpeg" alt="Liburan bersama" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🌅</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">☀️</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/18.jpeg" alt="Makan malam romantis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">☀️</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🎭</span> 
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/21.jpeg" alt="Menonton film bersama" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🎭</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🏃</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/10-1.jpeg" alt="Jalan santai bersama" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🏃</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🍃</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/12.jpeg" alt="Perayaan bersama" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🍃</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🌸</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/15.jpeg" alt="Foto di taman" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon"> 🌸</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">📱</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/11.jpeg" alt="Selfie bersama" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">📱</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">👥</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/13.jpeg" alt="Aktivitas kreatif" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">👥</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🌃</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/14.jpeg" alt="Malam romantis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🌃</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🎵</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/19.jpeg" alt="Mendengarkan musik" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🎵</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🏖️</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/4.jpeg" alt="Di pantai" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🏖️</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🎪</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/5.jpeg" alt="Bermain wahana" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🎪</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">📚</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/20.jpeg" alt="Membaca bersama" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">📚</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🌙</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/21-1.jpeg" alt="Makan pizza" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🌙</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🌺</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/6.jpeg" alt="Dengan bunga" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🌺</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🚗</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/7.jpeg" alt="Road trip" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🚗</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🧸</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/9.jpeg" alt="Momen lucu" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🧸</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🎮</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/8.jpeg" alt="Main game" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🎮</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">📅</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/23.jpeg" alt="Dengan bunga" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">📅</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🎯</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/24.jpeg" alt="Road trip" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🎯</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">📍</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/25.jpeg" alt="Momen lucu" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">📍</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="photo-card" onclick="revealPhoto(this)">
+            <div class="photo-placeholder">
+                <span class="photo-icon">🌟</span>
+            </div>
+            <div class="photo-reveal" style="display: none;">
+                <img src="images/26.jpeg" alt="Main game" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="photo-fallback">
+                    <span class="photo-icon">🌟</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+            <!-- Letter Section -->
+            <section id="letter" class="section">
+                <div class="letter-container">
+                    <div class="letter-header">
+                        <h2>Sayangku Tercinta,</h2>
+                        <div class="letter-date">Di hari spesialmu</div>
+                    </div>
+                    
+                    <div class="letter-content">
+                        <div class="letter-paragraph" onclick="revealParagraph(this)">
+                            <p class="paragraph-preview">Klik untuk membaca bagian pertama...</p>
+                            <p class="paragraph-full" style="display: none;">
+                                Selamat ulang tahun! Satu tahun ini terasa begitu cepat, ya? Rasanya baru kemarin kita mulai berjalan bersama, tapi hari ini kita sudah satu tahun berdua. Banyak hal yang kita lalui bareng, dari yang menyenangkan sampai yang penuh tantangan, dan setiap detiknya jadi kenangan yang nggak akan pernah aku lupakan. Terima kasih sudah ada di sampingku, jadi teman, sahabat, dan pasangan yang luar biasa.
+                            </p>
+                        </div>
+
+                        <div class="letter-paragraph" onclick="revealParagraph(this)">
+                            <p class="paragraph-preview">Klik untuk melanjutkan membaca...</p>
+                            <p class="paragraph-full" style="display: none;">
+                                Aku nggak pernah nyangka bisa menemukan seseorang seistimewa kamu. Kamu yang selalu ngerti aku, yang selalu ada saat aku butuh, dan yang nggak pernah lelah menunjukkan cinta. Kamu ngajarin aku banyak hal, salah satunya tentang bagaimana menikmati setiap momen dan nggak takut untuk jadi diri sendiri. Aku jadi merasa lebih baik dan lebih berarti sejak kamu datang ke dalam hidupku.
+                            </p>
+                        </div>
+
+                        <div class="letter-paragraph" onclick="revealParagraph(this)">
+                            <p class="paragraph-preview">Klik untuk membaca lebih lanjut...</p>
+                            <p class="paragraph-full" style="display: none;">
+                                Satu tahun yang penuh dengan tawa, candaan, dan kadang kesedihan itu udah bikin kita lebih kuat. Aku nggak tahu ke depan bakal gimana, tapi aku yakin selama kita tetap berdua, segala hal bisa kita hadapi bareng. Aku beruntung banget bisa punya kamu, dan aku nggak sabar buat lihat ke mana kita akan berjalan selanjutnya.
+                            </p>
+                        </div>
+
+                        <div class="letter-paragraph" onclick="revealParagraph(this)">
+                            <p class="paragraph-preview">Klik untuk kata-kata terakhir...</p>
+                            <p class="paragraph-full" style="display: none;">
+                                Selamat ulang tahun, Sayangku. Semoga tahun ini membawa segala hal yang kamu impikan dan lebih. Terima kasih sudah menjadi dirimu yang luar biasa, sudah mencintaiku dengan tulus, dan membuat setiap hariku lebih cerah hanya dengan kehadiranmu di sisi aku.
+                                <br><br>
+                                <em>Dengan seluruh cintaku, selamanya dan untuk selamanya.</em>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Counter -->
+        <div class="love-counter">
+            <span id="daysCounter">0</span> hari bersama
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
